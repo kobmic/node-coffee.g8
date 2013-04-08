@@ -1,0 +1,56 @@
+# Cakefile
+
+{spawn, exec} = require 'child_process'
+
+REPORTER = 'spec'
+BUILD_DEBUG = './build/debug'
+BUILD_RELEASE = './build/release'
+
+# run unit tests
+task 'test', 'run unit tests', ->
+    exec "NODE_ENV=test
+             ./node_modules/.bin/mocha
+             --compilers coffee:coffee-script
+             --reporter #{REPORTER}
+             --require coffee-script
+             --colors
+           ", (err, output) ->
+        throw err if err
+        console.log output
+
+# run integration tests
+task 'test-integration', 'run integration tests', ->
+    exec "NODE_ENV=test
+              ./node_modules/.bin/mocha
+              --compilers coffee:coffee-script
+              --reporter #{REPORTER} test_integration
+              --require coffee-script
+              --colors
+            ", (err, output) ->
+        throw err if err
+        console.log output
+
+task 'instrument', 'instrument code coverage', ->
+    #clean_cov
+    exec "mkdir /tmp/coverage", (err, output) ->
+
+    @mkdir /tmp/coverage
+@tar -cf - . | (cd /tmp/coverage && tar -xf -)
+@rm -rf /tmp/coverage/test_integration
+
+@cd /tmp/coverage/ && ./node_modules/coffee-coverage/bin/coffeecoverage --initfile init.js --exclude node_modules,.git,test,assets . .
+
+# build
+task 'build', ->
+    # FIXME
+    console.log('done')
+
+# run server in DEV mode
+task 'run', 'run node in development env', ->
+    invoke 'build'
+    node = spawn 'node', ['server.js']
+    node.stdout.on 'data', (data) -> console.log data.toString()
+    node.stderr.on 'data', (data) -> console.log data.toString()
+    process.on 'SIGINT', () -> node.kill 'SIGINT'
+
+
