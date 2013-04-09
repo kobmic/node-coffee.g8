@@ -28,6 +28,6 @@
     },
 
     "engines":{
-        "node":"$node-version$"
+        "node":"$nodeversion$"
     }
 }
