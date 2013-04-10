@@ -7,6 +7,9 @@
 * Socket.io
 * Mocha, Sinon, Chai
 
+### Prerequisites:
+Node.js, cofffeescript, npm and cake installed
+
 ### usage:
 Follow g8 [installation instructions](http://github.com/n8han/giter8#readme)  
 go to your favourite shell and enter  
@@ -14,5 +17,7 @@ go to your favourite shell and enter
     g8 kobmic/node-express-coffee
     cd [app-name]
 
+    npm install -d
+	
     cake run
 
