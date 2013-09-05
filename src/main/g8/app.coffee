@@ -3,14 +3,12 @@ path = require 'path'
 socketio = require 'socket.io'
 
 module.exports = (initFn)->
-    # initFn is a function the do init the application
     app = express()
 
     module.exports.static_route
     app.configure ->
         app.set('port', process.env.PORT || 8080);
         app.use(express.favicon())
-        #Not used inteferce with binary uploads app.use(express.bodyParser())
         app.use(express.methodOverride())
         app.use(express.limit('2mb'));
 
@@ -40,20 +38,13 @@ module.exports = (initFn)->
     #Init Routes
     require('./routes')(app, module.exports.static_route)
 
-
-
     if initFn?
         http = require 'http'
         server = http.createServer app
         io = require('socket.io').listen server
-
         io.set 'transports', ['websocket']
-
         app.configure 'test', -> io.set 'log level',0
-
         server.listen app.get('port'), initFn
-
-
     app
 
 

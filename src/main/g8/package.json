@@ -8,9 +8,8 @@
         "testWatch":"./node_modules/mocha/bin/mocha  -R min -W"
     },
     "dependencies":{
-        "coffee-middle":">= 0.0.1",
-        "coffee-script":">= 0.0.1",
-        "async":">0.0.1",
+        "coffee-script":"*",
+        "async":"*",
         "express":"*",
         "socket.io":"*",
         "fs":"*"
@@ -21,10 +20,7 @@
         "mocha":"*",
         "chai":"*",
         "coffee-coverage":"*",
-        "supertest":"*",
-        "assetgraph-builder":"*",
-        "zombie":"*",
-        "proxyquire":"*"
+        "supertest":"*"
     },
 
     "engines":{
