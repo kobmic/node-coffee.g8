@@ -11,8 +11,7 @@
         "coffee-script":"*",
         "async":"*",
         "express":"*",
-        "socket.io":"*",
-        "fs":"*"
+        "socket.io":"*"
     },
     "devDependencies":{
         "nock":"*",
