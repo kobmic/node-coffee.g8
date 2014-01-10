@@ -73,7 +73,7 @@ task 'build', ->
 
 build = (callback) ->
     clean "#{BUILD_DEBUG}", ->
-    command = "#{COFFEE} --output #{BUILD_DEBUG}/js assets/js/ && cp -r public/* #{BUILD_DEBUG}"
+    command = "#{COFFEE} --output #{BUILD_DEBUG}/scripts public/scripts/ && cp -r public #{BUILD_DEBUG}"
     console.log command
     exec command, (err, output) ->
         if (err)
