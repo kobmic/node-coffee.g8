@@ -2,7 +2,7 @@ express = require 'express'
 path = require 'path'
 socketio = require 'socket.io'
 
-module.exports = (initFn)->
+module.exports = () ->
     app = express()
 
     module.exports.static_route
@@ -10,6 +10,7 @@ module.exports = (initFn)->
         app.set('port', process.env.PORT || 8080);
         app.use(express.favicon())
         app.use(express.methodOverride())
+        app.use(express.bodyParser());
         app.use(express.limit('2mb'));
 
     app.configure 'development', ->
@@ -20,31 +21,26 @@ module.exports = (initFn)->
         app.use express.errorHandler()
 
     app.configure ->
+        module.exports.static_route = path.join __dirname, 'public'
+        app.use(express.static(path.join(__dirname, 'public')))
+
+        #app.set('views', __dirname + '/public/views')
         app.use(app.router)
 
-    app.configure 'production', ->
-        module.exports.static_route = path.join __dirname, 'build/release'
-        oneYear = 1000*60*60*24*365
-        app.use(express.static(path.join(__dirname, 'build/release'),{ maxAge: oneYear }))
+        # use hogan express
+        #app.set 'view engine', 'html'
+        #app.engine 'html', require('hogan-express')
+        #app.set('layout', 'layout')
+        #app.set('partials', head: "head")
 
-    app.configure 'test', ->
-        module.exports.static_route = path.join __dirname, 'build/debug'
-        app.use(express.static(path.join(__dirname, 'build/debug')))
-
-    app.configure 'development', ->
-        module.exports.static_route = path.join __dirname, 'build/debug'
-        app.use(express.static(path.join(__dirname, 'build/debug')))
 
     #Init Routes
     require('./routes')(app, module.exports.static_route)
 
-    if initFn?
-        http = require 'http'
-        server = http.createServer app
-        io = require('socket.io').listen server
-        io.set 'transports', ['websocket']
-        app.configure 'test', -> io.set 'log level',0
-        server.listen app.get('port'), initFn
+    http = require 'http'
+    server = http.createServer app
+    server.listen app.get('port'), () ->
+        console.log("Server listening on port "+ app.get('port'))
     app
 
 
