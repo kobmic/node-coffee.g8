@@ -1,5 +1,4 @@
-require('coffee-script');
-
-console.log("Starting server with:", process.env);
+var CoffeeScript = require('coffee-script');
+CoffeeScript.register();
 
 var app = require('./app');
