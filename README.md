@@ -1,10 +1,9 @@
 ## [giter8](http://github.com/n8han/giter8) template for node.js express project in coffeescript
 
 ### uses
-* Node.js 0.10.24
-* Coffeescript 1.6.3
-* Express 3.1.1
-* Socket.io
+* Node.js 0.10.26
+* Coffeescript 1.7.1
+* Express 3.4.8
 * Mocha, Sinon, Chai
 
 ### prerequisites:
@@ -18,6 +17,8 @@ go to your favourite shell and enter
     cd [app-name]
 
     npm install -d
-	
+
     cake run
 
+### License:
+This project is licensed under the Apache License, Version 2.0, see http://www.apache.org/licenses/LICENSE-2.0
