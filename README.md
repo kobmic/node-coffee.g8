@@ -19,9 +19,11 @@ Go to your favourite shell and enter
     g8 kobmic/node-coffee
     cd [app-name]
 
-    npm install -d
+    npm install 
 
     npm start
+
+    npm test
 
 
 
