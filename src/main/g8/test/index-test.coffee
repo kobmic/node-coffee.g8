@@ -7,16 +7,13 @@ sinon = require 'sinon'
 
 request = require 'supertest'
 
-
-describe "when testing routes", ->
-
-    app =
+describe "Index route", ->
+    app = null
     req = null
-
 
     beforeEach ->
 
-        app = require('../app')()
+        app = require '../app'
         req = request app
 
 

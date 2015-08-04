@@ -1,47 +1,61 @@
 express = require 'express'
 path = require 'path'
-socketio = require 'socket.io'
+favicon = require 'serve-favicon'
+logger = require 'morgan'
+cookieParser = require 'cookie-parser'
+bodyParser = require 'body-parser'
+https = require 'https'
+http = require 'http'
 
-module.exports = () ->
-    app = express()
+routes = require './routes/index'
+users = require './routes/users'
 
-    module.exports.static_route
-    app.configure ->
-        app.set('port', process.env.PORT || 8080);
-        app.use(express.favicon())
-        app.use(express.methodOverride())
-        app.use(express.bodyParser());
-        app.use(express.limit('2mb'));
+app = express()
 
-    app.configure 'development', ->
-        app.use express.logger({ format: 'short' })
-        app.use express.errorHandler()
-
-    app.configure 'test', ->
-        app.use express.errorHandler()
-
-    app.configure ->
-        module.exports.static_route = path.join __dirname, 'public'
-        app.use(express.static(path.join(__dirname, 'public')))
-
-        #app.set('views', __dirname + '/public/views')
-        app.use(app.router)
-
-        # use hogan express
-        #app.set 'view engine', 'html'
-        #app.engine 'html', require('hogan-express')
-        #app.set('layout', 'layout')
-        #app.set('partials', head: "head")
+# set max socket connections
+https.globalAgent.maxSockets = 1000
+http.globalAgent.maxSockets = 1000
 
 
-    #Init Routes
-    require('./routes')(app, module.exports.static_route)
+# view engine setup
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'hjs')
 
-    http = require 'http'
-    server = http.createServer app
-    server.listen app.get('port'), () ->
-        console.log("Server listening on port "+ app.get('port'))
-    app
+# uncomment after placing your favicon in /public
+#app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+app.use(logger('dev'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, 'public')))
+
+# routes
+app.use('/', routes)
+app.use('/users', users)
+
+# catch 404 and forward to error handler
+app.use (req, res, next) ->
+    err = new Error('Not Found')
+    err.status = 404
+    next(err)
+
+#
+# error handlers
+#
+
+# development error handler
+# will print stacktrace
+if (app.get('env') == 'development')
+    app.use (err, req, res, next) ->
+        res.status(err.status || 500)
+        res.render('error', { message: err.message, error: err})
+
+# production error handler
+# no stacktraces leaked to user
+app.use (err, req, res, next) ->
+    res.status(err.status || 500)
+    res.render('error', { message: err.message, error: {} })
 
 
-    
+module.exports = app
