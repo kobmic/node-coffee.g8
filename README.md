@@ -4,10 +4,11 @@
 * Node.js 0.12.x
 * Coffeescript 1.9.3
 * Express 4.x
+* Gulp 3.9.0
 * Mocha, Sinon, Chai
 
 ### prerequisites:
-Node.js, cofffeescript, and npm installed
+Node.js, cofffeescript, npm and gulp installed
 
 ### usage:
 Follow g8 [installation instructions](http://github.com/n8han/giter8#readme) or when using homebrew:
@@ -21,10 +22,9 @@ Go to your favourite shell and enter
 
     npm install 
 
-    npm start
-
-    npm test
-
+    gulp build
+    gulp run
+    gulp test
 
 
 ### License:

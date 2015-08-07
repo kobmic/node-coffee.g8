@@ -18,20 +18,27 @@ http.globalAgent.maxSockets = 1000
 
 
 # view engine setup
-app.set('views', path.join(__dirname, 'views'))
+app.set('views', path.join(__dirname, 'public/views'))
 app.set 'view engine', 'html'
 app.engine 'html', require('hogan-express')
 app.engine 'xml', require('hogan-express')
 
-
 # uncomment after placing your favicon in /public
 #app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
-app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
+
+if ('production' == process.env.NODE_ENV)
+    # production config
+    app.use(logger(':req[x-forwarded-for] - - [:date] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :response-time ms'))
+    app.use(express.static(path.join(__dirname, 'static/release')))
+else
+    # development config
+    app.use(logger('dev'))
+    app.use(express.static(path.join(__dirname, 'static/debug')))
+
 
 # routes
 app.use('/', routes)
